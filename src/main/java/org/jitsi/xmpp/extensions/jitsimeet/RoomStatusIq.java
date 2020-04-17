@@ -15,6 +15,7 @@
  */
 package org.jitsi.xmpp.extensions.jitsimeet;
 
+import org.jitsi.utils.logging.Logger;
 import org.jivesoftware.smack.packet.*;
 import org.jxmpp.jid.*;
 
@@ -27,6 +28,20 @@ import org.jxmpp.jid.*;
 public class RoomStatusIq
     extends IQ
 {
+    
+    /**
+     * The classLogger instance used by this class.
+     */
+    private final static Logger classLogger
+        = Logger.getLogger(RoomStatusIq.class);
+
+    /**
+     * The logger for this instance. Uses the logging level either the one of
+     * {@link #classLogger} or the one passed to the constructor, whichever
+     * is higher.
+     */
+    private final Logger logger = Logger.getLogger(classLogger, null);
+    
     /**
      * Name space of roomStatus packet extension.
      */
@@ -74,6 +89,7 @@ public class RoomStatusIq
     protected IQChildElementXmlStringBuilder getIQChildElementBuilder(
             IQChildElementXmlStringBuilder xml)
     {
+        
         if (jid != null)
         {
             xml.attribute(JID_ATTR_NAME, jid);
@@ -87,6 +103,8 @@ public class RoomStatusIq
         xml.rightAngleBracket()
             .append(roomStatus.toString());
 
+        logger.warn("Building xml roomStatus " + xml.toString());
+        
         return xml;
     }
 

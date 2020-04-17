@@ -15,6 +15,7 @@
  */
 package org.jitsi.xmpp.extensions.jitsimeet;
 
+import org.jitsi.utils.logging.Logger;
 import org.jivesoftware.smack.provider.*;
 
 import org.jxmpp.jid.*;
@@ -29,6 +30,20 @@ import org.xmlpull.v1.*;
 public class RoomStatusIqProvider
     extends IQProvider<RoomStatusIq>
 {
+    
+    /**
+     * The classLogger instance used by this class.
+     */
+    private final static Logger classLogger
+        = Logger.getLogger(RoomStatusIqProvider.class);
+
+    /**
+     * The logger for this instance. Uses the logging level either the one of
+     * {@link #classLogger} or the one passed to the constructor, whichever
+     * is higher.
+     */
+    private final Logger logger = Logger.getLogger(classLogger, null);
+    
     /**
      * Registers this IQ provider into given <tt>ProviderManager</tt>.
      */
@@ -100,8 +115,13 @@ public class RoomStatusIqProvider
 
                 case XmlPullParser.TEXT:
                 {
-                    Boolean roomStatus = Boolean.parseBoolean(parser.getText());
-                    iq.setRoomStatus(roomStatus);
+                    if(parser.getText() != null && parser.getText().length()  > 0) {
+                        Boolean roomStatus = Boolean.parseBoolean(parser.getText());
+                        iq.setRoomStatus(roomStatus);
+                    }
+                    else {
+                        logger.warn("Getting roomStatus request without value");
+                    }
                     break;
                 }
             }
