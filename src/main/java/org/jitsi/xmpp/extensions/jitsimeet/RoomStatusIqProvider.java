@@ -116,8 +116,15 @@ public class RoomStatusIqProvider
                 case XmlPullParser.TEXT:
                 {
                     if(parser.getText() != null && parser.getText().length()  > 0) {
-                        Boolean roomStatus = Boolean.parseBoolean(parser.getText());
-                        iq.setRoomStatus(roomStatus);
+                        if(parser.getText().equals("check")) {
+                            logger.warn("Checking roomStatus request");
+                            iq.setCheckRequest(true);
+                        }
+                        else {
+                            Boolean roomStatus = Boolean.parseBoolean(parser.getText());
+                            iq.setRoomStatus(roomStatus);
+                            iq.setCheckRequest(false);
+                        }
                     }
                     else {
                         logger.warn("Getting roomStatus request without value");

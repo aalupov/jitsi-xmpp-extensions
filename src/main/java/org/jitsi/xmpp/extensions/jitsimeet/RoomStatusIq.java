@@ -78,6 +78,11 @@ public class RoomStatusIq
     private Boolean roomStatus;
 
     /**
+     * To roomStatus or unroomStatus.
+     */
+    private Boolean checkRequest;
+
+    /**
      * Creates a new instance of this class.
      */
     public RoomStatusIq()
@@ -145,6 +150,14 @@ public class RoomStatusIq
         return roomStatus;
     }
 
+    public void setCheckRequest(Boolean checkRequest)
+    {
+        this.checkRequest = checkRequest;
+    }
+    public Boolean getCheckRequest()
+    {
+        return checkRequest;
+    }
     /**
      * Returns the peer jid that initiated the roomStatus, if any.
      * @return the peer jid that initiated the roomStatus.
