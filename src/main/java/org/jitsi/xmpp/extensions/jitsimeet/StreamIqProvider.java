@@ -15,7 +15,6 @@
  */
 package org.jitsi.xmpp.extensions.jitsimeet;
 
-import org.jitsi.utils.logging.Logger;
 import org.jivesoftware.smack.provider.*;
 
 import org.jxmpp.jid.*;
@@ -23,62 +22,49 @@ import org.jxmpp.jid.impl.*;
 import org.xmlpull.v1.*;
 
 /**
- * The parser of {@link RoomStatusIq}.
+ * The parser of {@link StreamIq}.
  *
  * @author Pawel Domas
  */
-public class RoomStatusIqProvider
-        extends IQProvider<RoomStatusIq> {
-
-    /**
-     * The classLogger instance used by this class.
-     */
-    private final static Logger classLogger
-            = Logger.getLogger(RoomStatusIqProvider.class);
-
-    /**
-     * The logger for this instance. Uses the logging level either the one of
-     * {@link #classLogger} or the one passed to the constructor, whichever is
-     * higher.
-     */
-    private final Logger logger = Logger.getLogger(classLogger, null);
+public class StreamIqProvider
+        extends IQProvider<StreamIq> {
 
     /**
      * Registers this IQ provider into given <tt>ProviderManager</tt>.
      */
-    public static void registerRoomStatusIqProvider() {
-        ProviderManager.addIQProvider(RoomStatusIq.ELEMENT_NAME,
-                RoomStatusIq.NAMESPACE,
-                new RoomStatusIqProvider());
+    public static void registerStreamIqProvider() {
+        ProviderManager.addIQProvider(StreamIq.ELEMENT_NAME,
+                StreamIq.NAMESPACE,
+                new StreamIqProvider());
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public RoomStatusIq parse(XmlPullParser parser, int initialDepth)
+    public StreamIq parse(XmlPullParser parser, int initialDepth)
             throws Exception {
         String namespace = parser.getNamespace();
 
         // Check the namespace
-        if (!RoomStatusIq.NAMESPACE.equals(namespace)) {
+        if (!StreamIq.NAMESPACE.equals(namespace)) {
             return null;
         }
 
         String rootElement = parser.getName();
 
-        RoomStatusIq iq;
+        StreamIq iq;
 
-        if (RoomStatusIq.ELEMENT_NAME.equals(rootElement)) {
-            iq = new RoomStatusIq();
-            String jidStr = parser.getAttributeValue("", RoomStatusIq.JID_ATTR_NAME);
+        if (StreamIq.ELEMENT_NAME.equals(rootElement)) {
+            iq = new StreamIq();
+            String jidStr = parser.getAttributeValue("", StreamIq.JID_ATTR_NAME);
             if (jidStr != null) {
                 Jid jid = JidCreate.from(jidStr);
                 iq.setJid(jid);
             }
 
             String actorStr
-                    = parser.getAttributeValue("", RoomStatusIq.ACTOR_ATTR_NAME);
+                    = parser.getAttributeValue("", StreamIq.ACTOR_ATTR_NAME);
             if (actorStr != null) {
                 Jid actor = JidCreate.from(actorStr);
                 iq.setActor(actor);
@@ -101,18 +87,8 @@ public class RoomStatusIqProvider
                 }
 
                 case XmlPullParser.TEXT: {
-                    if (parser.getText() != null && parser.getText().length() > 0) {
-                        if (parser.getText().equals("check")) {
-                            logger.warn("Checking roomStatus request");
-                            iq.setCheckRequest(true);
-                        } else {
-                            Boolean roomStatus = Boolean.parseBoolean(parser.getText());
-                            iq.setRoomStatus(roomStatus);
-                            iq.setCheckRequest(false);
-                        }
-                    } else {
-                        logger.warn("Getting roomStatus request without value");
-                    }
+                    Boolean stream = Boolean.parseBoolean(parser.getText());
+                    iq.setStream(stream);
                     break;
                 }
             }
