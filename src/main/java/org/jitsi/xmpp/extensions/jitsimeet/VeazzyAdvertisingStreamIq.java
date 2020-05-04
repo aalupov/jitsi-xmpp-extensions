@@ -24,18 +24,21 @@ import org.jxmpp.jid.*;
  *
  * @author Pawel Domas
  */
-public class VeazzyStreamIq
+public class VeazzyAdvertisingStreamIq
         extends IQ {
 
     /**
      * Name space of mute packet extension.
      */
-    public static final String NAMESPACE = "http://jitsi.org/jitmeet/stream";
+    public static final String NAMESPACE = "http://jitsi.org/jitmeet/advertisingstream";
 
+    public static final int STREAM_STATUS_STOP = 0;
+    public static final int STREAM_STATUS_START = 1;
+    
     /**
      * XML element name of mute packet extension.
      */
-    public static final String ELEMENT_NAME = "stream";
+    public static final String ELEMENT_NAME = "advertisingStream";
 
     /**
      * Attribute name of "jid".
@@ -60,12 +63,12 @@ public class VeazzyStreamIq
     /**
      * To stream or not.
      */
-    private Boolean stream;
+    private int advertisingStreamStatus;
 
     /**
      * Creates a new instance of this class.
      */
-    public VeazzyStreamIq() {
+    public VeazzyAdvertisingStreamIq() {
         super(ELEMENT_NAME, NAMESPACE);
     }
 
@@ -81,7 +84,7 @@ public class VeazzyStreamIq
         }
 
         xml.rightAngleBracket()
-                .append(stream.toString());
+                .append(String.valueOf(advertisingStreamStatus));
 
         return xml;
     }
@@ -106,17 +109,17 @@ public class VeazzyStreamIq
     /**
      * The action contained in the text part of 'mute' XML element body.
      *
-     * @param stream
+     * @param advertisingStreamStatus
      */
-    public void setStream(Boolean stream) {
-        this.stream = stream;
+    public void setAdvertisingStreamStatus(int advertisingStreamStatus) {
+        this.advertisingStreamStatus = advertisingStreamStatus;
     }
 
     /**
      * @return stream
      */
-    public Boolean getStream() {
-        return stream;
+    public int getAdvertisingStreamStatus() {
+        return advertisingStreamStatus;
     }
 
     /**

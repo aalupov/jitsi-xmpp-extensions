@@ -22,53 +22,60 @@ import org.jxmpp.jid.impl.*;
 import org.xmlpull.v1.*;
 
 /**
- * The parser of {@link VeazzyStreamIq}.
+ * The parser of {@link MuteIq}.
  *
  * @author Pawel Domas
  */
-public class VeazzyStreamIqProvider
-        extends IQProvider<VeazzyStreamIq> {
+public class MuteIqProvider
+        extends IQProvider<MuteIq> {
 
     /**
      * Registers this IQ provider into given <tt>ProviderManager</tt>.
      */
-    public static void registerVeazzyStreamIqProvider() {
-        ProviderManager.addIQProvider(VeazzyStreamIq.ELEMENT_NAME,
-                VeazzyStreamIq.NAMESPACE,
-                new VeazzyStreamIqProvider());
+    public static void registerMuteIqProvider() {
+        ProviderManager.addIQProvider(MuteIq.ELEMENT_NAME,
+                MuteIq.NAMESPACE,
+                new MuteIqProvider());
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public VeazzyStreamIq parse(XmlPullParser parser, int initialDepth)
+    public MuteIq parse(XmlPullParser parser, int initialDepth)
             throws Exception {
         String namespace = parser.getNamespace();
 
         // Check the namespace
-        if (!VeazzyStreamIq.NAMESPACE.equals(namespace)) {
+        if (!MuteIq.NAMESPACE.equals(namespace)) {
             return null;
         }
 
         String rootElement = parser.getName();
 
-        VeazzyStreamIq iq;
+        MuteIq iq;
 
-        if (VeazzyStreamIq.ELEMENT_NAME.equals(rootElement)) {
-            iq = new VeazzyStreamIq();
-            String jidStr = parser.getAttributeValue("", VeazzyStreamIq.JID_ATTR_NAME);
+        if (MuteIq.ELEMENT_NAME.equals(rootElement)) {
+            iq = new MuteIq();
+            String jidStr = parser.getAttributeValue("", MuteIq.JID_ATTR_NAME);
             if (jidStr != null) {
                 Jid jid = JidCreate.from(jidStr);
                 iq.setJid(jid);
             }
 
             String actorStr
-                    = parser.getAttributeValue("", VeazzyStreamIq.ACTOR_ATTR_NAME);
+                    = parser.getAttributeValue("", MuteIq.ACTOR_ATTR_NAME);
             if (actorStr != null) {
                 Jid actor = JidCreate.from(actorStr);
                 iq.setActor(actor);
             }
+
+            String blockAudioControlStr
+                    = parser.getAttributeValue("", MuteIq.BLOCK_AUDIO_CONTROL_ATTR_NAME);
+            if (blockAudioControlStr != null) {
+                iq.setBlockAudioControl(Boolean.valueOf(blockAudioControlStr));
+            }
+
         } else {
             return null;
         }
@@ -87,8 +94,10 @@ public class VeazzyStreamIqProvider
                 }
 
                 case XmlPullParser.TEXT: {
-                    Boolean stream = Boolean.parseBoolean(parser.getText());
-                    iq.setStream(stream);
+                    if (parser.getText() != null && parser.getText().length() > 0) {
+                        Boolean doMute = Boolean.parseBoolean(parser.getText());
+                        iq.setDoMute(doMute);
+                    }
                     break;
                 }
             }

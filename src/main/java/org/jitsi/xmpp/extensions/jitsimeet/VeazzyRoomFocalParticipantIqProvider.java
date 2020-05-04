@@ -23,18 +23,18 @@ import org.jxmpp.jid.impl.*;
 import org.xmlpull.v1.*;
 
 /**
- * The parser of {@link VeazzyRoomManagerIq}.
+ * The parser of {@link VeazzyRoomFocalParticipantIq}.
  *
  * @author Pawel Domas
  */
-public class VeazzyRoomManagerIqProvider
-        extends IQProvider<VeazzyRoomManagerIq> {
+public class VeazzyRoomFocalParticipantIqProvider
+        extends IQProvider<VeazzyRoomFocalParticipantIq> {
 
     /**
      * The classLogger instance used by this class.
      */
     private final static Logger classLogger
-            = Logger.getLogger(VeazzyRoomManagerIqProvider.class);
+            = Logger.getLogger(VeazzyRoomFocalParticipantIqProvider.class);
 
     /**
      * The logger for this instance. Uses the logging level either the one of
@@ -46,43 +46,44 @@ public class VeazzyRoomManagerIqProvider
     /**
      * Registers this IQ provider into given <tt>ProviderManager</tt>.
      */
-    public static void registerVeazzyRoomManagerIqProvider() {
-        ProviderManager.addIQProvider(VeazzyRoomManagerIq.ELEMENT_NAME,
-                VeazzyRoomManagerIq.NAMESPACE,
-                new VeazzyRoomManagerIqProvider());
+    public static void registerVeazzyRoomFocalParticipantIqProvider() {
+        ProviderManager.addIQProvider(VeazzyRoomFocalParticipantIq.ELEMENT_NAME,
+                VeazzyRoomFocalParticipantIq.NAMESPACE,
+                new VeazzyRoomFocalParticipantIqProvider());
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public VeazzyRoomManagerIq parse(XmlPullParser parser, int initialDepth)
+    public VeazzyRoomFocalParticipantIq parse(XmlPullParser parser, int initialDepth)
             throws Exception {
         String namespace = parser.getNamespace();
 
         // Check the namespace
-        if (!VeazzyRoomManagerIq.NAMESPACE.equals(namespace)) {
+        if (!VeazzyRoomFocalParticipantIq.NAMESPACE.equals(namespace)) {
             return null;
         }
 
         String rootElement = parser.getName();
 
-        VeazzyRoomManagerIq iq;
+        VeazzyRoomFocalParticipantIq iq;
 
-        if (VeazzyRoomManagerIq.ELEMENT_NAME.equals(rootElement)) {
-            iq = new VeazzyRoomManagerIq();
-            String jidStr = parser.getAttributeValue("", VeazzyRoomManagerIq.JID_ATTR_NAME);
+        if (VeazzyRoomFocalParticipantIq.ELEMENT_NAME.equals(rootElement)) {
+            iq = new VeazzyRoomFocalParticipantIq();
+            String jidStr = parser.getAttributeValue("", VeazzyRoomFocalParticipantIq.JID_ATTR_NAME);
             if (jidStr != null) {
                 Jid jid = JidCreate.from(jidStr);
                 iq.setJid(jid);
             }
 
             String actorStr
-                    = parser.getAttributeValue("", VeazzyRoomManagerIq.ACTOR_ATTR_NAME);
+                    = parser.getAttributeValue("", VeazzyRoomFocalParticipantIq.ACTOR_ATTR_NAME);
             if (actorStr != null) {
                 Jid actor = JidCreate.from(actorStr);
                 iq.setActor(actor);
             }
+            
         } else {
             return null;
         }
@@ -103,11 +104,11 @@ public class VeazzyRoomManagerIqProvider
                 case XmlPullParser.TEXT: {
                     if (parser.getText() != null && parser.getText().length() > 0) {
                         if (parser.getText().equals(VeazzyRoomManagerIq.ELEMENT_CHECK_VALUE)) {
-                            iq.setCheckRoomManagerIdRequest(true);
+                            iq.setCheckRoomFocalParticipantIdRequest(true);
                         } else {
-                            String roomManagerId = parser.getText();
-                            iq.setRoomManagerId(roomManagerId);
-                            iq.setCheckRoomManagerIdRequest(false);
+                            String roomFocalParticipantId = parser.getText();
+                            iq.setRoomFocalParticipantId(roomFocalParticipantId);
+                            iq.setCheckRoomFocalParticipantIdRequest(false);
                         }
                     } else {
                         logger.warn("Getting roomManagerId request without value");
