@@ -22,49 +22,49 @@ import org.jxmpp.jid.impl.*;
 import org.xmlpull.v1.*;
 
 /**
- * The parser of {@link StreamIq}.
+ * The parser of {@link VeazzyStreamIq}.
  *
  * @author Pawel Domas
  */
-public class StreamIqProvider
-        extends IQProvider<StreamIq> {
+public class VeazzyStreamIqProvider
+        extends IQProvider<VeazzyStreamIq> {
 
     /**
      * Registers this IQ provider into given <tt>ProviderManager</tt>.
      */
-    public static void registerStreamIqProvider() {
-        ProviderManager.addIQProvider(StreamIq.ELEMENT_NAME,
-                StreamIq.NAMESPACE,
-                new StreamIqProvider());
+    public static void registerVeazzyStreamIqProvider() {
+        ProviderManager.addIQProvider(VeazzyStreamIq.ELEMENT_NAME,
+                VeazzyStreamIq.NAMESPACE,
+                new VeazzyStreamIqProvider());
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public StreamIq parse(XmlPullParser parser, int initialDepth)
+    public VeazzyStreamIq parse(XmlPullParser parser, int initialDepth)
             throws Exception {
         String namespace = parser.getNamespace();
 
         // Check the namespace
-        if (!StreamIq.NAMESPACE.equals(namespace)) {
+        if (!VeazzyStreamIq.NAMESPACE.equals(namespace)) {
             return null;
         }
 
         String rootElement = parser.getName();
 
-        StreamIq iq;
+        VeazzyStreamIq iq;
 
-        if (StreamIq.ELEMENT_NAME.equals(rootElement)) {
-            iq = new StreamIq();
-            String jidStr = parser.getAttributeValue("", StreamIq.JID_ATTR_NAME);
+        if (VeazzyStreamIq.ELEMENT_NAME.equals(rootElement)) {
+            iq = new VeazzyStreamIq();
+            String jidStr = parser.getAttributeValue("", VeazzyStreamIq.JID_ATTR_NAME);
             if (jidStr != null) {
                 Jid jid = JidCreate.from(jidStr);
                 iq.setJid(jid);
             }
 
             String actorStr
-                    = parser.getAttributeValue("", StreamIq.ACTOR_ATTR_NAME);
+                    = parser.getAttributeValue("", VeazzyStreamIq.ACTOR_ATTR_NAME);
             if (actorStr != null) {
                 Jid actor = JidCreate.from(actorStr);
                 iq.setActor(actor);

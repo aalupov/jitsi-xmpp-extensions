@@ -15,6 +15,7 @@
  */
 package org.jitsi.xmpp.extensions.jitsimeet;
 
+import org.jitsi.utils.logging.Logger;
 import org.jivesoftware.smack.provider.*;
 
 import org.jxmpp.jid.*;
@@ -22,65 +23,65 @@ import org.jxmpp.jid.impl.*;
 import org.xmlpull.v1.*;
 
 /**
- * The parser of {@link MuteIq}.
+ * The parser of {@link VeazzyRoomStatusIq}.
  *
  * @author Pawel Domas
  */
-public class MuteIqProvider
-        extends IQProvider<MuteIq> {
+public class VeazzyRoomStatusIqProvider
+        extends IQProvider<VeazzyRoomStatusIq> {
+
+    /**
+     * The classLogger instance used by this class.
+     */
+    private final static Logger classLogger
+            = Logger.getLogger(VeazzyRoomStatusIqProvider.class);
+
+    /**
+     * The logger for this instance. Uses the logging level either the one of
+     * {@link #classLogger} or the one passed to the constructor, whichever is
+     * higher.
+     */
+    private final Logger logger = Logger.getLogger(classLogger, null);
 
     /**
      * Registers this IQ provider into given <tt>ProviderManager</tt>.
      */
-    public static void registerMuteIqProvider() {
-        ProviderManager.addIQProvider(
-                MuteIq.ELEMENT_NAME,
-                MuteIq.NAMESPACE,
-                new MuteIqProvider());
+    public static void registerVeazzyRoomStatusIqProvider() {
+        ProviderManager.addIQProvider(VeazzyRoomStatusIq.ELEMENT_NAME,
+                VeazzyRoomStatusIq.NAMESPACE,
+                new VeazzyRoomStatusIqProvider());
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public MuteIq parse(XmlPullParser parser, int initialDepth)
+    public VeazzyRoomStatusIq parse(XmlPullParser parser, int initialDepth)
             throws Exception {
         String namespace = parser.getNamespace();
 
         // Check the namespace
-        if (!MuteIq.NAMESPACE.equals(namespace)) {
+        if (!VeazzyRoomStatusIq.NAMESPACE.equals(namespace)) {
             return null;
         }
 
         String rootElement = parser.getName();
 
-        MuteIq iq;
+        VeazzyRoomStatusIq iq;
 
-        if (MuteIq.ELEMENT_NAME.equals(rootElement)) {
-            iq = new MuteIq();
-            String jidStr = parser.getAttributeValue("", MuteIq.JID_ATTR_NAME);
+        if (VeazzyRoomStatusIq.ELEMENT_NAME.equals(rootElement)) {
+            iq = new VeazzyRoomStatusIq();
+            String jidStr = parser.getAttributeValue("", VeazzyRoomStatusIq.JID_ATTR_NAME);
             if (jidStr != null) {
                 Jid jid = JidCreate.from(jidStr);
                 iq.setJid(jid);
             }
 
             String actorStr
-                    = parser.getAttributeValue("", MuteIq.ACTOR_ATTR_NAME);
+                    = parser.getAttributeValue("", VeazzyRoomStatusIq.ACTOR_ATTR_NAME);
             if (actorStr != null) {
                 Jid actor = JidCreate.from(actorStr);
                 iq.setActor(actor);
-            }
-
-            String blockStr
-                    = parser.getAttributeValue("", MuteIq.BLOCK_ATTR_NAME);
-            if (blockStr != null) {
-                iq.setBlock(Boolean.valueOf(blockStr));
-            }
-
-            String videoStr
-                    = parser.getAttributeValue("", MuteIq.VIDEO_ATTR_NAME);
-            if (videoStr != null) {
-                iq.setVideo(Boolean.valueOf(videoStr));
             }
         } else {
             return null;
@@ -100,8 +101,18 @@ public class MuteIqProvider
                 }
 
                 case XmlPullParser.TEXT: {
-                    Boolean mute = Boolean.parseBoolean(parser.getText());
-                    iq.setMute(mute);
+                    if (parser.getText() != null && parser.getText().length() > 0) {
+                        if (parser.getText().equals("check")) {
+                            logger.warn("Checking roomStatus request");
+                            iq.setCheckRequest(true);
+                        } else {
+                            Boolean roomStatus = Boolean.parseBoolean(parser.getText());
+                            iq.setRoomStatus(roomStatus);
+                            iq.setCheckRequest(false);
+                        }
+                    } else {
+                        logger.warn("Getting roomStatus request without value");
+                    }
                     break;
                 }
             }

@@ -25,14 +25,14 @@ import org.jxmpp.jid.*;
  *
  * @author Pawel Domas
  */
-public class RoomStatusIq
+public class VeazzyRoomStatusIq
         extends IQ {
 
     /**
      * The classLogger instance used by this class.
      */
     private final static Logger classLogger
-            = Logger.getLogger(RoomStatusIq.class);
+            = Logger.getLogger(VeazzyRoomStatusIq.class);
 
     /**
      * The logger for this instance. Uses the logging level either the one of
@@ -84,7 +84,7 @@ public class RoomStatusIq
     /**
      * Creates a new instance of this class.
      */
-    public RoomStatusIq() {
+    public VeazzyRoomStatusIq() {
         super(ELEMENT_NAME, NAMESPACE);
     }
 

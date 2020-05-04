@@ -24,18 +24,18 @@ import org.jxmpp.jid.*;
  *
  * @author Pawel Domas
  */
-public class MuteIq
+public class VeazzyStreamIq
         extends IQ {
 
     /**
      * Name space of mute packet extension.
      */
-    public static final String NAMESPACE = "http://jitsi.org/jitmeet/audio";
+    public static final String NAMESPACE = "http://jitsi.org/jitmeet/stream";
 
     /**
      * XML element name of mute packet extension.
      */
-    public static final String ELEMENT_NAME = "mute";
+    public static final String ELEMENT_NAME = "stream";
 
     /**
      * Attribute name of "jid".
@@ -48,44 +48,24 @@ public class MuteIq
     public static final String ACTOR_ATTR_NAME = "actor";
 
     /**
-     * Attribute name of "block".
-     */
-    public static final String BLOCK_ATTR_NAME = "block";
-
-    /**
-     * Attribute name of "video".
-     */
-    public static final String VIDEO_ATTR_NAME = "video";
-
-    /**
-     * Muted peer MUC jid.
+     * Streamd peer MUC jid.
      */
     private Jid jid;
 
     /**
-     * The jid of the peer tha initiated the mute, optional.
+     * The jid of the peer tha initiated the streamId, optional.
      */
     private Jid actor;
 
     /**
-     * To mute or unmute.
+     * To stream or not.
      */
-    private Boolean mute;
-
-    /**
-     * To block microphone or display microphone.
-     */
-    private Boolean block;
-
-    /**
-     * To block microphone or display microphone.
-     */
-    private Boolean video;
+    private Boolean stream;
 
     /**
      * Creates a new instance of this class.
      */
-    public MuteIq() {
+    public VeazzyStreamIq() {
         super(ELEMENT_NAME, NAMESPACE);
     }
 
@@ -100,16 +80,8 @@ public class MuteIq
             xml.attribute(ACTOR_ATTR_NAME, actor);
         }
 
-        if (block != null) {
-            xml.attribute(BLOCK_ATTR_NAME, block);
-        }
-
-        if (video != null) {
-            xml.attribute(VIDEO_ATTR_NAME, video);
-        }
-
         xml.rightAngleBracket()
-                .append(mute.toString());
+                .append(stream.toString());
 
         return xml;
     }
@@ -124,7 +96,7 @@ public class MuteIq
     }
 
     /**
-     * Returns MUC jid of the participant in the form of
+     * @return MUC jid of the participant in the form of
      * "room_name@muc.server.net/nickname".
      */
     public Jid getJid() {
@@ -134,19 +106,17 @@ public class MuteIq
     /**
      * The action contained in the text part of 'mute' XML element body.
      *
-     * @param mute <tt>true</tt> to mute the participant. <tt>null</tt> means no
-     * action is included in result XML.
+     * @param stream
      */
-    public void setMute(Boolean mute) {
-        this.mute = mute;
+    public void setStream(Boolean stream) {
+        this.stream = stream;
     }
 
     /**
-     * Returns <tt>true</tt> to mute the participant, <tt>false</tt> to unmute
-     * or <tt>null</tt> if the action has not been specified(which is invalid).
+     * @return stream
      */
-    public Boolean getMute() {
-        return mute;
+    public Boolean getStream() {
+        return stream;
     }
 
     /**
@@ -165,43 +135,5 @@ public class MuteIq
      */
     public void setActor(Jid actor) {
         this.actor = actor;
-    }
-
-    /**
-     * The action contained in the text part of 'mute' XML element body.
-     *
-     * @param block <tt>true</tt> to block the microphone of the participant.
-     * <tt>null</tt> means no action is included in result XML.
-     */
-    public void setBlock(Boolean block) {
-        this.block = block;
-    }
-
-    /**
-     * Returns <tt>true</tt> to block the microphone of the participant,
-     * <tt>false</tt> to show the microphone button or <tt>null</tt> if the
-     * action has not been specified(which is invalid).
-     */
-    public Boolean getBlock() {
-        return block;
-    }
-
-    /**
-     * The action contained in the text part of 'mute' XML element body.
-     *
-     * @param video <tt>true</tt> to block the microphone of the participant.
-     * <tt>null</tt> means no action is included in result XML.
-     */
-    public void setVideo(Boolean video) {
-        this.video = video;
-    }
-
-    /**
-     * Returns <tt>true</tt> to block the microphone of the participant,
-     * <tt>false</tt> to show the microphone button or <tt>null</tt> if the
-     * action has not been specified(which is invalid).
-     */
-    public Boolean getVideo() {
-        return video;
     }
 }

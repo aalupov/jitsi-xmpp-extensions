@@ -15,7 +15,6 @@
  */
 package org.jitsi.xmpp.extensions.jitsimeet;
 
-import org.jitsi.utils.logging.Logger;
 import org.jivesoftware.smack.provider.*;
 
 import org.jxmpp.jid.*;
@@ -23,66 +22,60 @@ import org.jxmpp.jid.impl.*;
 import org.xmlpull.v1.*;
 
 /**
- * The parser of {@link ModeratorIdIq}.
+ * The parser of {@link VeazzyMainScreenParticipantIq}.
  *
  * @author Pawel Domas
  */
-public class ModeratorIdIqProvider
-        extends IQProvider<ModeratorIdIq> {
-
-    /**
-     * The classLogger instance used by this class.
-     */
-    private final static Logger classLogger
-            = Logger.getLogger(ModeratorIdIqProvider.class);
-
-    /**
-     * The logger for this instance. Uses the logging level either the one of
-     * {@link #classLogger} or the one passed to the constructor, whichever is
-     * higher.
-     */
-    private final Logger logger = Logger.getLogger(classLogger, null);
+public class VeazzyMainScreenParticipantIqProvider
+        extends IQProvider<VeazzyMainScreenParticipantIq> {
 
     /**
      * Registers this IQ provider into given <tt>ProviderManager</tt>.
      */
-    public static void registerModeratorIdIqProvider() {
-        ProviderManager.addIQProvider(ModeratorIdIq.ELEMENT_NAME,
-                ModeratorIdIq.NAMESPACE,
-                new ModeratorIdIqProvider());
+    public static void registerVeazzyMainScreenParticipantIqProvider() {
+        ProviderManager.addIQProvider(VeazzyMainScreenParticipantIq.ELEMENT_NAME,
+                VeazzyMainScreenParticipantIq.NAMESPACE,
+                new VeazzyMainScreenParticipantIqProvider());
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public ModeratorIdIq parse(XmlPullParser parser, int initialDepth)
+    public VeazzyMainScreenParticipantIq parse(XmlPullParser parser, int initialDepth)
             throws Exception {
         String namespace = parser.getNamespace();
 
         // Check the namespace
-        if (!ModeratorIdIq.NAMESPACE.equals(namespace)) {
+        if (!VeazzyMainScreenParticipantIq.NAMESPACE.equals(namespace)) {
             return null;
         }
 
         String rootElement = parser.getName();
 
-        ModeratorIdIq iq;
+        VeazzyMainScreenParticipantIq iq;
 
-        if (ModeratorIdIq.ELEMENT_NAME.equals(rootElement)) {
-            iq = new ModeratorIdIq();
-            String jidStr = parser.getAttributeValue("", ModeratorIdIq.JID_ATTR_NAME);
+        if (VeazzyMainScreenParticipantIq.ELEMENT_NAME.equals(rootElement)) {
+            iq = new VeazzyMainScreenParticipantIq();
+            String jidStr = parser.getAttributeValue("", VeazzyMainScreenParticipantIq.JID_ATTR_NAME);
             if (jidStr != null) {
                 Jid jid = JidCreate.from(jidStr);
                 iq.setJid(jid);
             }
 
             String actorStr
-                    = parser.getAttributeValue("", ModeratorIdIq.ACTOR_ATTR_NAME);
+                    = parser.getAttributeValue("", VeazzyMainScreenParticipantIq.ACTOR_ATTR_NAME);
             if (actorStr != null) {
                 Jid actor = JidCreate.from(actorStr);
                 iq.setActor(actor);
             }
+
+            String withMeStr
+                    = parser.getAttributeValue("", VeazzyMainScreenParticipantIq.WITH_ME_ATTR_NAME);
+            if (withMeStr != null) {
+                iq.setWithMe(Boolean.valueOf(withMeStr));
+            }
+
         } else {
             return null;
         }
@@ -101,18 +94,8 @@ public class ModeratorIdIqProvider
                 }
 
                 case XmlPullParser.TEXT: {
-                    if (parser.getText() != null && parser.getText().length() > 0) {
-                        if (parser.getText().equals("get")) {
-                            logger.warn("Getting moderatorId request");
-                            iq.setModeratorIdRequest(true);
-                        } else {
-                            String moderatorId = parser.getText();
-                            iq.setModeratorId(moderatorId);
-                            iq.setModeratorIdRequest(false);
-                        }
-                    } else {
-                        logger.warn("Getting moderatorId request without value");
-                    }
+                    String participantId = parser.getText();
+                    iq.setParticipantId(participantId);
                     break;
                 }
             }
