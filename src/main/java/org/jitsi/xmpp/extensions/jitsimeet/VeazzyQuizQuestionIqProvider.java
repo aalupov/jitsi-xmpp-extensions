@@ -23,18 +23,18 @@ import org.jxmpp.jid.impl.*;
 import org.xmlpull.v1.*;
 
 /**
- * The parser of {@link VeazzyQuizIq}.
+ * The parser of {@link VeazzyQuizQuestionIq}.
  *
  * @author Pawel Domas
  */
-public class VeazzyQuizIqProvider
-        extends IQProvider<VeazzyQuizIq> {
+public class VeazzyQuizQuestionIqProvider
+        extends IQProvider<VeazzyQuizQuestionIq> {
 
     /**
      * The classLogger instance used by this class.
      */
     private final static Logger classLogger
-            = Logger.getLogger(VeazzyQuizIqProvider.class);
+            = Logger.getLogger(VeazzyQuizQuestionIqProvider.class);
 
     /**
      * The logger for this instance. Uses the logging level either the one of
@@ -46,63 +46,84 @@ public class VeazzyQuizIqProvider
     /**
      * Registers this IQ provider into given <tt>ProviderManager</tt>.
      */
-    public static void registerVeazzyQuizIqProvider() {
-        ProviderManager.addIQProvider(VeazzyQuizIq.ELEMENT_NAME,
-                VeazzyQuizIq.NAMESPACE,
-                new VeazzyQuizIqProvider());
+    public static void registerVeazzyQuizQuestionIqProvider() {
+        ProviderManager.addIQProvider(VeazzyQuizQuestionIq.ELEMENT_NAME,
+                VeazzyQuizQuestionIq.NAMESPACE,
+                new VeazzyQuizQuestionIqProvider());
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public VeazzyQuizIq parse(XmlPullParser parser, int initialDepth)
+    public VeazzyQuizQuestionIq parse(XmlPullParser parser, int initialDepth)
             throws Exception {
         String namespace = parser.getNamespace();
 
         // Check the namespace
-        if (!VeazzyQuizIq.NAMESPACE.equals(namespace)) {
+        if (!VeazzyQuizQuestionIq.NAMESPACE.equals(namespace)) {
             return null;
         }
 
         String rootElement = parser.getName();
 
-        VeazzyQuizIq iq;
+        VeazzyQuizQuestionIq iq;
 
-        if (VeazzyQuizIq.ELEMENT_NAME.equals(rootElement)) {
-            iq = new VeazzyQuizIq();
-            String jidStr = parser.getAttributeValue("", VeazzyQuizIq.JID_ATTR_NAME);
+        if (VeazzyQuizQuestionIq.ELEMENT_NAME.equals(rootElement)) {
+            iq = new VeazzyQuizQuestionIq();
+            String jidStr = parser.getAttributeValue("", VeazzyQuizQuestionIq.JID_ATTR_NAME);
             if (jidStr != null) {
                 Jid jid = JidCreate.from(jidStr);
                 iq.setJid(jid);
             }
 
             String actorStr
-                    = parser.getAttributeValue("", VeazzyQuizIq.ACTOR_ATTR_NAME);
+                    = parser.getAttributeValue("", VeazzyQuizQuestionIq.ACTOR_ATTR_NAME);
             if (actorStr != null) {
                 Jid actor = JidCreate.from(actorStr);
                 iq.setActor(actor);
             }
             
             String answerAStr
-                    = parser.getAttributeValue("", VeazzyQuizIq.ANSWER_A_ATTR_NAME);
+                    = parser.getAttributeValue("", VeazzyQuizQuestionIq.ANSWER_A_ATTR_NAME);
             if (answerAStr != null) {
                 iq.setAnswerA(answerAStr);
             }
             String answerBStr
-                    = parser.getAttributeValue("", VeazzyQuizIq.ANSWER_B_ATTR_NAME);
+                    = parser.getAttributeValue("", VeazzyQuizQuestionIq.ANSWER_B_ATTR_NAME);
             if (answerBStr != null) {
                 iq.setAnswerB(answerBStr);
             }
             String answerCStr
-                    = parser.getAttributeValue("", VeazzyQuizIq.ANSWER_C_ATTR_NAME);
+                    = parser.getAttributeValue("", VeazzyQuizQuestionIq.ANSWER_C_ATTR_NAME);
             if (answerCStr != null) {
                 iq.setAnswerC(answerCStr);
             }
             String answerDStr
-                    = parser.getAttributeValue("", VeazzyQuizIq.ANSWER_D_ATTR_NAME);
+                    = parser.getAttributeValue("", VeazzyQuizQuestionIq.ANSWER_D_ATTR_NAME);
             if (answerDStr != null) {
                 iq.setAnswerD(answerDStr);
+            }
+            
+            String statusAStr
+                    = parser.getAttributeValue("", VeazzyQuizQuestionIq.STATUS_A_ATTR_NAME);
+            if (statusAStr != null) {
+                iq.setStatusA(Boolean.valueOf(statusAStr));
+            }
+            String statusBStr
+                    = parser.getAttributeValue("", VeazzyQuizQuestionIq.STATUS_B_ATTR_NAME);
+            if (statusBStr != null) {
+                iq.setStatusB(Boolean.valueOf(statusBStr));
+            }
+            String statusCStr
+                    = parser.getAttributeValue("", VeazzyQuizQuestionIq.STATUS_C_ATTR_NAME);
+            if (statusCStr != null) {
+                iq.setStatusC(Boolean.valueOf(statusCStr));
+            }
+            String statusDStr
+                    = parser.getAttributeValue("", VeazzyQuizQuestionIq.STATUS_D_ATTR_NAME);
+            if (statusDStr != null) {
+                iq.setStatusD(Boolean.valueOf(statusDStr));
             }
         } else {
             return null;
@@ -126,7 +147,7 @@ public class VeazzyQuizIqProvider
                         String question = parser.getText();
                         iq.setQuestion(question);
                     } else {
-                        logger.warn("Getting questionId request without value");
+                        logger.warn("Getting quizQuestion request without value");
                     }
                     break;
                 }

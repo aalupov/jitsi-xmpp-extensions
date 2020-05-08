@@ -24,14 +24,14 @@ import org.jxmpp.jid.*;
  *
  * @author Pawel Domas
  */
-public class VeazzyAnswerIq
+public class VeazzyQuizAnswerIq
         extends IQ {
 
     /**
      * The classLogger instance used by this class.
      */
     private final static Logger classLogger
-            = Logger.getLogger(VeazzyAnswerIq.class);
+            = Logger.getLogger(VeazzyQuizAnswerIq.class);
 
     /**
      * The logger for this instance. Uses the logging level either the one of
@@ -43,11 +43,11 @@ public class VeazzyAnswerIq
     /**
      * Name space of moderatorId packet extension.
      */
-    public static final String NAMESPACE = "http://jitsi.org/jitmeet/answer";
+    public static final String NAMESPACE = "http://jitsi.org/jitmeet/quizanswer";
     /**
      * XML element name of moderatorId packet extension.
      */
-    public static final String ELEMENT_NAME = "answer";
+    public static final String ELEMENT_NAME = "quizAnswer";
 
     /**
      * Attribute name of "jid".
@@ -77,7 +77,7 @@ public class VeazzyAnswerIq
     /**
      * Creates a new instance of this class.
      */
-    public VeazzyAnswerIq() {
+    public VeazzyQuizAnswerIq() {
         super(ELEMENT_NAME, NAMESPACE);
     }
 

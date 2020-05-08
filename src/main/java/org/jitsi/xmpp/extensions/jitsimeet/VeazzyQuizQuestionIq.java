@@ -24,14 +24,14 @@ import org.jxmpp.jid.*;
  *
  * @author Pawel Domas
  */
-public class VeazzyQuizIq
+public class VeazzyQuizQuestionIq
         extends IQ {
 
     /**
      * The classLogger instance used by this class.
      */
     private final static Logger classLogger
-            = Logger.getLogger(VeazzyQuizIq.class);
+            = Logger.getLogger(VeazzyQuizQuestionIq.class);
 
     /**
      * The logger for this instance. Uses the logging level either the one of
@@ -43,11 +43,11 @@ public class VeazzyQuizIq
     /**
      * Name space of moderatorId packet extension.
      */
-    public static final String NAMESPACE = "http://jitsi.org/jitmeet/quiz";
+    public static final String NAMESPACE = "http://jitsi.org/jitmeet/quizquestion";
     /**
      * XML element name of moderatorId packet extension.
      */
-    public static final String ELEMENT_NAME = "quiz";
+    public static final String ELEMENT_NAME = "quizQuestion";
 
     /**
      * Attribute name of "jid".
@@ -63,6 +63,10 @@ public class VeazzyQuizIq
     public static final String ANSWER_B_ATTR_NAME = "answerB";
     public static final String ANSWER_C_ATTR_NAME = "answerC";
     public static final String ANSWER_D_ATTR_NAME = "answerD";
+    public static final String STATUS_A_ATTR_NAME = "statusA";
+    public static final String STATUS_B_ATTR_NAME = "statusB";
+    public static final String STATUS_C_ATTR_NAME = "statusC";
+    public static final String STATUS_D_ATTR_NAME = "statusD";
     
     /**
      * Muted peer MUC jid.
@@ -81,12 +85,18 @@ public class VeazzyQuizIq
     private String answerB;
     private String answerC;
     private String answerD;
+    
+    private Boolean statusA;
+    private Boolean statusB;
+    private Boolean statusC;
+    private Boolean statusD;
+    
     private String question;
     
     /**
      * Creates a new instance of this class.
      */
-    public VeazzyQuizIq() {
+    public VeazzyQuizQuestionIq() {
         super(ELEMENT_NAME, NAMESPACE);
     }
 
@@ -101,6 +111,7 @@ public class VeazzyQuizIq
         if (actor != null) {
             xml.attribute(ACTOR_ATTR_NAME, actor);
         }
+        
         if (answerA != null) {
             xml.attribute(ANSWER_A_ATTR_NAME, answerA);
         }
@@ -112,6 +123,18 @@ public class VeazzyQuizIq
         }
         if (answerD != null) {
             xml.attribute(ANSWER_D_ATTR_NAME, answerD);
+        }
+        if (statusA != null) {
+            xml.attribute(STATUS_A_ATTR_NAME, statusA);
+        }
+        if (statusB != null) {
+            xml.attribute(STATUS_B_ATTR_NAME, statusB);
+        }
+        if (statusC != null) {
+            xml.attribute(STATUS_C_ATTR_NAME, statusC);
+        }
+        if (statusD != null) {
+            xml.attribute(STATUS_D_ATTR_NAME, statusD);
         }
 
         xml.rightAngleBracket()
@@ -228,5 +251,61 @@ public class VeazzyQuizIq
      */
     public void setAnswerD(String answerD) {
         this.answerD = answerD;
+    }
+
+    /**
+     * @return the statusA
+     */
+    public Boolean getStatusA() {
+        return statusA;
+    }
+
+    /**
+     * @param statusA the statusA to set
+     */
+    public void setStatusA(Boolean statusA) {
+        this.statusA = statusA;
+    }
+
+    /**
+     * @return the statusB
+     */
+    public Boolean getStatusB() {
+        return statusB;
+    }
+
+    /**
+     * @param statusB the statusB to set
+     */
+    public void setStatusB(Boolean statusB) {
+        this.statusB = statusB;
+    }
+
+    /**
+     * @return the statusC
+     */
+    public Boolean getStatusC() {
+        return statusC;
+    }
+
+    /**
+     * @param statusC the statusC to set
+     */
+    public void setStatusC(Boolean statusC) {
+        this.statusC = statusC;
+    }
+
+    /**
+     * @return the statusD
+     */
+    public Boolean getStatusD() {
+        return statusD;
+    }
+
+    /**
+     * @param statusD the statusD to set
+     */
+    public void setStatusD(Boolean statusD) {
+        this.statusD = statusD;
     }
 }
