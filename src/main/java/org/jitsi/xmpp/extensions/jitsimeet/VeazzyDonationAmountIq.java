@@ -113,11 +113,11 @@ public class VeazzyDonationAmountIq
             xml.attribute(ACTOR_ATTR_NAME, actor);
         }
 
-        if (actor != null) {
+        if (avatar != null) {
             xml.attribute(AVATAR_ATTR_NAME, avatar);
         }
         
-        if (actor != null) {
+        if (currency != null) {
             xml.attribute(CURRENCY_ATTR_NAME, currency);
         }
         

@@ -87,7 +87,7 @@ public class VeazzyDonationAmountIqProvider
             }
             
             String avatarStr
-                    = parser.getAttributeValue("", VeazzyDonationAmountIq.ACTOR_ATTR_NAME);
+                    = parser.getAttributeValue("", VeazzyDonationAmountIq.AVATAR_ATTR_NAME);
             iq.setAvatar(avatarStr);
             
             String currencyStr
