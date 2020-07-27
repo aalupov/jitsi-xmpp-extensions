@@ -24,14 +24,14 @@ import org.jxmpp.jid.*;
  *
  * @author Pawel Domas
  */
-public class VeazzyDonationAmountIq
+public class VeazzyRaiseHandIq
         extends IQ {
 
     /**
      * The classLogger instance used by this class.
      */
     private final static Logger classLogger
-            = Logger.getLogger(VeazzyDonationAmountIq.class);
+            = Logger.getLogger(VeazzyRaiseHandIq.class);
 
     /**
      * The logger for this instance. Uses the logging level either the one of
@@ -43,12 +43,15 @@ public class VeazzyDonationAmountIq
     /**
      * Name space of moderatorId packet extension.
      */
-    public static final String NAMESPACE = "http://jitsi.org/jitmeet/donationamount";
+    public static final String NAMESPACE = "http://jitsi.org/jitmeet/raisehand";
 
+    public static final int RAISE_HAND_STATUS_HAND_DOWNED = 0;
+    public static final int RAISE_HAND_STATUS_HAND_RAISED = 1;
+    
     /**
      * XML element name of moderatorId packet extension.
      */
-    public static final String ELEMENT_NAME = "donationAmount";
+    public static final String ELEMENT_NAME = "raiseHand";
 
     /**
      * Attribute name of "jid".
@@ -63,11 +66,7 @@ public class VeazzyDonationAmountIq
     /**
      * Attribute name of "actor".
      */
-    public static final String AVATAR_ATTR_NAME = "avatar";
-    /**
-     * Attribute name of "actor".
-     */
-    public static final String CURRENCY_ATTR_NAME = "currency";
+    public static final String PARTICIPANT_RAISE_HAND_NAME = "participantToRaiseHand";
     
     /**
      * Muted peer MUC jid.
@@ -80,23 +79,19 @@ public class VeazzyDonationAmountIq
     private Jid actor;
 
     /**
-     * The Avatar.
+     * The participantToRaiseHand.
      */
-    private String avatar;
+    private String participantToRaiseHand;
     /**
-     * The Currency.
+     * The Raise Hand Status.
      */
-    private String currency;
-    /**
-     * The Donation Amount.
-     */
-    private String donationAmount;
+    private int raiseHandStatus;
 
     
     /**
      * Creates a new instance of this class.
      */
-    public VeazzyDonationAmountIq() {
+    public VeazzyRaiseHandIq() {
         super(ELEMENT_NAME, NAMESPACE);
     }
 
@@ -112,18 +107,14 @@ public class VeazzyDonationAmountIq
             xml.attribute(ACTOR_ATTR_NAME, actor);
         }
 
-        if (avatar != null) {
-            xml.attribute(AVATAR_ATTR_NAME, avatar);
-        }
-        
-        if (currency != null) {
-            xml.attribute(CURRENCY_ATTR_NAME, currency);
+        if (participantToRaiseHand != null) {
+            xml.attribute(PARTICIPANT_RAISE_HAND_NAME, participantToRaiseHand);
         }
         
         xml.rightAngleBracket()
-                .append(donationAmount);
+                .append(String.valueOf(raiseHandStatus));
 
-        logger.warn("Building xml VeazzyDonationAmount " + xml.toString());
+        logger.warn("Building xml VeazzyRaiseHand " + xml.toString());
 
         return xml;
     }
@@ -145,36 +136,29 @@ public class VeazzyDonationAmountIq
         return jid;
     }
 
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
+    public void setParticipantToRaiseHand(String participantToRaiseHand) {
+        this.participantToRaiseHand = participantToRaiseHand;
     }
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-    public String getCurrency() {
-        return currency;
+    public String getParticipantToRaiseHand() {
+        return participantToRaiseHand;
     }
     
     
     /**
-     * The action contained in the text part of 'donationAmount' XML element body.
+     * The action contained in the text part of 'raiseHandStatus' XML element body.
      *
-     * @param donationAmount
+     * @param raiseHandStatus
      */
-    public void setDonationAmount(String donationAmount) {
-        this.donationAmount = donationAmount;
+    public void setRaiseHandStatus(int raiseHandStatus) {
+        this.raiseHandStatus = raiseHandStatus;
     }
 
     /**
-     * Returns donationAmount or <tt>null</tt> if the action has not been
+     * Returns raiseHandStatus or <tt>null</tt> if the action has not been
      * specified(which is invalid).
      */
-    public String getDonationAmount() {
-        return donationAmount;
+    public int getRaiseHandStatus() {
+        return raiseHandStatus;
     }
 
     /**
